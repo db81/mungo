@@ -1,10 +1,15 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { match, RouterContext } from 'react-router'
-import { AppRouter } from 'components'
+import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import { Provider } from 'react-redux'
+import { AppRoutes } from 'components'
+import reducers from 'reducers'
 
 export default function(req, res) {
-    match({ routes: AppRouter, location: req.url }, (err, redirect, props) => {
+    let store = createStore(reducers, { docs: { foo: 42 } }, applyMiddleware(thunk))
+    match({ routes: AppRoutes, location: req.url }, (err, redirect, props) => {
         if (err) {
             res.status(500).send(err.message)
         } else if (redirect) {
@@ -17,7 +22,9 @@ export default function(req, res) {
                         <title>Mungo</title>
                     </head>
                     <body>
-                        <div id="root">${renderToString(<RouterContext {...props} />)}</div>
+                        <div id="root">${renderToString(<Provider store={store}>
+                            <RouterContext {...props} /></Provider>)}</div>
+                        <script>document.__initialState = ${JSON.stringify(store.getState())}</script>
                         <script src="/bundle.js"></script>
                     </body>
                 </html>

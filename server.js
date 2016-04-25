@@ -1,3 +1,5 @@
+// This module doesn't get transpiled by Babel, but everything
+// required from it does thanks to babel-register.
 "use strict"
 require('app-module-path').addPath(__dirname)
 require('babel-polyfill')
