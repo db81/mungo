@@ -5,7 +5,8 @@
   "private": true,
   "main": "server.js",
   "scripts": {
-    "start": "webpack --progress --color && node server.js"
+    "start": "webpack --progress --color && node server.js",
+    "watch": "webpack --progress --color --watch"
   },
   "babel": {
     "presets": [
@@ -30,7 +31,8 @@
     "express": "^4.13.4",
     "nodejs": "0.0.0",
     "react": "^15.0.1",
-    "react-dom": "^15.0.1"
+    "react-dom": "^15.0.1",
+    "react-router": "^2.3.0"
   },
   "devDependencies": {
     "babel-loader": "^6.2.4",
