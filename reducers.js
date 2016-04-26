@@ -1,14 +1,5 @@
 import { combineReducers } from 'redux'
 
-function docs(state = {}, action) {
-    switch(action.type) {
-    case 'ADD_DOCUMENT':
-        return { [action.doc.id]: action.doc, ...state }
-    default:
-        return state
-    }
-}
-
 function views(state = {}, action) {
     switch(action.type) {
     default:
@@ -17,12 +8,15 @@ function views(state = {}, action) {
 }
 
 function collections(state = {}, action) {
+    let col = action.collection
     switch(action.type) {
-    case 'ADD_DOCUMENT':
-        return { [action.collection]: [...state[action.collection], action.doc.id] }
+    case 'FILL_COLLECTION':
+        return { ...state, [col]: { stale: false, docs: action.docs } }
+    case 'INVALIDATE_COLLECTION':
+        return { ...state, [col]: { ...state[col], stale: true } }
     default:
         return state
     }
 }
 
-export default combineReducers({ docs, views, collections })
+export default combineReducers({ views, collections })

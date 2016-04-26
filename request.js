@@ -6,10 +6,15 @@ import thunk from 'redux-thunk'
 import { Provider } from 'react-redux'
 import { AppRoutes } from 'components'
 import reducers from 'reducers'
+import { fillCollection } from 'actions'
 
 function renderSite(props) {
     let store = createStore(reducers, applyMiddleware(thunk))
-    return `
+    let promises = []
+    if (props.params.collection) {
+        promises.push(store.dispatch(fillCollection(props.params.collection)))
+    }
+    return Promise.all(promises).then(() => `
         <!doctype html>
         <html>
             <head>
@@ -23,7 +28,7 @@ function renderSite(props) {
                 <script src="/bundle.js"></script>
             </body>
         </html>
-    `
+    `)
 }
 
 export default function(req, res, next) {
@@ -33,7 +38,7 @@ export default function(req, res, next) {
         } else if (redirect) {
             res.redirect(302, redirect.pathname + redirect.search)
         } else if (props) {
-            res.send(renderSite(props))
+            renderSite(props).then(html => res.send(html))
         } else {
             //res.status(404).send('Not found.')
             next()

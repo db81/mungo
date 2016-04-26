@@ -6,6 +6,7 @@ export let AppRoutes =
     <Router history={browserHistory}>
         <Route path="/" component={Index}>
             <Route path="views/:view" component={View} />
+            <Route path="collections/:collection" component={Collection} />
         </Route>
     </Router>
 
@@ -21,4 +22,8 @@ export function Index(props) {
 
 export function View(props) {
     return <p>View {props.params.view}. <Link to="/">Back</Link>.</p>
+}
+
+export function Collection(props) {
+    return <div>Collection {props.params.collection}</div>
 }
