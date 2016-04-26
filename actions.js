@@ -5,3 +5,9 @@ export function addDocument(collection, doc) {
         doc
     }
 }
+
+export function fillCollection(collection) {
+}
+
+export function fillView(view) {
+}

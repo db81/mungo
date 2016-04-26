@@ -5,17 +5,17 @@ import { connect } from 'react-redux'
 export let AppRoutes =
     <Router history={browserHistory}>
         <Route path="/" component={Index}>
-            <Route path=":view" component={View} />
+            <Route path="views/:view" component={View} />
         </Route>
     </Router>
 
-let Docs = connect(({docs}) => ({docs}))(props => <p>{JSON.stringify(props.docs)}</p>)
+let StoreState = connect(store => ({store}))(props => <pre>{JSON.stringify(props.store, null, 2)}</pre>)
 
 export function Index(props) {
     return <div>
         <div>Index</div>
         <div>{props.children}</div>
-        <Docs />
+        <StoreState />
     </div>
 }
 
