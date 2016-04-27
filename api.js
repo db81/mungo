@@ -43,7 +43,8 @@ router.route('/collections/:collection').
         catch(err => res.status(500).send(err.message)))
 
 router.route('/collections').
-    get((req, res) => db.collections().then(cols => res.json(cols.map(c => c.collectionName))).
+    get((req, res) => db.collections().then(cols => res.json(cols.map(c => c.collectionName).
+        filter(c => ['system.users', 'system.indexes', 'mungo'].indexOf(c) < 0))).
         catch(err => res.status(500).send(err.message)))
 
 router.use('/query', BodyParser.text())

@@ -3,17 +3,32 @@ import { Router, Route, Link, browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { fillCollections, fillCollection } from 'actions'
 
-let StoreState = connect(store => ({store}))(props => <pre>{JSON.stringify(props.store, null, 2)}</pre>)
+let StoreState = connect(store => ({store}))(props =>
+    <pre className="storeState">{JSON.stringify(props.store, null, 2)}</pre>)
+
+export let Doc = ({doc}) =>
+    <dl className="document">
+        {Object.keys(doc).filter(k => k[0] !== '_').map(k => [
+            <dt key={'t'+k}>{k}</dt>,
+            <dd key={'d'+k}>{doc[k]}</dd>
+        ])}
+    </dl>
 
 export let Index = connect(({ collections }) => ({ collections: Object.keys(collections) }))
 (React.createClass({
     render: function(){
-        return <div>
+        return <div className="index">
             <h1>Mungo</h1>
-            <div>{this.props.collections.map(col =>
-                <Link key={col} to={'/collections/' + col}>{col}</Link>)}</div>
-            <div>{this.props.children}</div>
-            <StoreState />
+            <h2>Collections</h2>
+            {this.props.collections.map(col =>
+                <Link
+                    activeClassName="active"
+                    key={col}
+                    to={'/collections/' + col}>
+                    {col}
+                </Link>
+            )}
+            {this.props.children}
         </div>
     }
 }))
@@ -27,13 +42,17 @@ export let Collection = connect(x => x, dispatch => ({ dispatch }),
         ({ ...d, collection: collections[collection], name: collection })
     )
 (React.createClass({
+    componentDidMount: function(){
+        if (this.props.collection.stale)
+            this.props.dispatch(fillCollection(this.props.name))
+    },
     componentWillUpdate: function(nextProps){
         if (this.props.name !== nextProps.name && nextProps.collection.stale)
             this.props.dispatch(fillCollection(nextProps.name))
     },
     render: function(){
-        return <div>
-            {(this.props.collection.docs || []).map(d => <p key={d._id}>{JSON.stringify(d)}</p>)}
+        return <div className="collection">
+            {(this.props.collection.docs || []).map(d => <Doc key={d._id} doc={d} />)}
         </div>
     }
 }))

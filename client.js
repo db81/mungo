@@ -1,4 +1,6 @@
-require('babel-polyfill')
+import 'babel-polyfill'
+
+import 'style.sass'
 
 import React from 'react'
 import { render } from 'react-dom'

@@ -1,0 +1,62 @@
+body
+    background-color: white
+
+$paneBgColor: #cfd7e1
+$indexPaneWidth: 250px
+$collectionPaneWidth: 480px
+
+.index, .collection
+    background-color: $paneBgColor
+    box-shadow: 5px 0px 5px 0px #919386
+
+.index
+    position: absolute
+    left: 0
+    top: 0
+    bottom: 0
+    width: $indexPaneWidth
+    h1
+        font-family: sans-serif
+        font-size: 3em
+        margin: 0
+        padding: 0.3em
+        text-align: center
+        color: white
+        background-color: #5285a1
+    h2
+        font-family: sans-serif
+        font-size: 1.8em
+        padding: 0 0.3em
+        margin: 0.7em 0.3em
+        border-bottom: 1px solid rgb(161, 169, 179)
+        color: rgb(119, 132, 135)
+        font-weight: normal
+        text-shadow: 0px 0px 3px rgb(226, 240, 246)
+    a
+        display: block
+        text-decoration: none
+        padding: 0.5em
+        font-size: 1.4em
+        color: rgb(43, 46, 47)
+    a:hover
+        background-color: rgba(65, 98, 99, 0.16)
+    a.active
+        color: #dde5ef
+        background-color: #6383a2
+
+.collection
+    position: absolute
+    left: $indexPaneWidth
+    top: 0
+    bottom: 0
+    padding: 1em
+    width: $collectionPaneWidth
+    border-image: linear-gradient(to right, #5A5C60 0%, #BDCBD8 100%) 1 100%
+    border-left-style: solid
+    border-left-width: 5px
+
+dl.document
+    dt
+        font-weight: bold
+    dd
+        margin-left: 1em

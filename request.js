@@ -18,6 +18,8 @@ function renderSite(res, props) {
         <!doctype html>
         <html>
             <head>
+                <meta charset="utf-8">
+                <link href="/bundle.css" rel="stylesheet" type="text/css">
                 <title>Mungo</title>
             </head>
             <body>
