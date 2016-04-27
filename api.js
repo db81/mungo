@@ -1,17 +1,18 @@
 import { Router } from 'express'
 import { MongoClient, ObjectID } from 'mongodb'
 import BodyParser from 'body-parser'
+import Config from 'config'
 
 let router = Router()
 let db = null
 
-MongoClient.connect('mongodb://localhost:27017/mungo', (err, db_) => {
+MongoClient.connect(Config.dbUrl, (err, db_) => {
     if (err) {
         console.log("Couldn't connect to database: " + err.message)
         process.exit(1)
     }
     db = db_
-    db.authenticate('mungo', '', (err, res) => {
+    db.authenticate(Config.dbUser, Config.dbPassword, (err, res) => {
         if (err || !res) {
             console.log("Failed database authentication: " + (err && err.message))
             process.exit(2)
