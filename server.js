@@ -6,6 +6,7 @@ require('babel-register')
 
 const Express = require('express')
 const compression = require('compression')
+const Config = require('./config.js').default
 const AppRequest = require('./request.js').default
 const Api = require('./api.js').default
 
@@ -16,5 +17,4 @@ app.use('/api', Api)
 app.use(AppRequest)
 app.use(compression())
 
-let port = parseInt(process.argv[2]) || 8080
-app.listen(port, () => console.log('Listening on port ' + port + '...'))
+app.listen(Config.port, () => console.log('Listening on port ' + Config.port + '...'))

@@ -1,6 +1,9 @@
 import fetch from 'isomorphic-fetch'
+import Config from 'config'
 
-let apiPrefix = 'http://localhost:8080/api'
+let apiPrefix = '/api'
+if (Config) // running on server
+    apiPrefix = `http://localhost:${Config.port}/api`
 
 export function fillCollections() {
     return (dispatch) => {

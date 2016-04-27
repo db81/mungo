@@ -13,5 +13,9 @@ module.exports = {
 	},
 	resolve: {
 		root: __dirname
-	}
+	},
+    // Resolve import 'config' to null if we're in the browser.
+    externals: {
+        config: 'null'
+    }
 };
