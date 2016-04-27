@@ -3,6 +3,7 @@
 require('app-module-path').addPath(__dirname)
 // Transpile everything required from this module with Babel.
 require('babel-register')
+require('babel-polyfill')
 
 const Express = require('express')
 const compression = require('compression')

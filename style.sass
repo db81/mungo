@@ -1,12 +1,10 @@
 body
     background-color: white
 
-$paneBgColor: #cfd7e1
 $indexPaneWidth: 250px
 $collectionPaneWidth: 480px
 
 .index, .collection
-    background-color: $paneBgColor
     box-shadow: 5px 0px 5px 0px #919386
 
 .index
@@ -14,6 +12,7 @@ $collectionPaneWidth: 480px
     left: 0
     top: 0
     bottom: 0
+    background-color: #cfd7e1
     width: $indexPaneWidth
     h1
         font-family: sans-serif
@@ -41,7 +40,7 @@ $collectionPaneWidth: 480px
     a:hover
         background-color: rgba(65, 98, 99, 0.16)
     a.active
-        color: #dde5ef
+        color: #eee
         background-color: #6383a2
 
 .collection
@@ -49,11 +48,14 @@ $collectionPaneWidth: 480px
     left: $indexPaneWidth
     top: 0
     bottom: 0
-    padding: 1em
+    padding: 1em 0
     width: $collectionPaneWidth
+    background-color: #e5e5e5
     border-image: linear-gradient(to right, #5A5C60 0%, #BDCBD8 100%) 1 100%
     border-left-style: solid
     border-left-width: 5px
+    > a
+        padding: 0.5em 1.0em
 
 dl.document
     dt

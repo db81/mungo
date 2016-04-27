@@ -14,7 +14,8 @@ function collections(state = {}, action) {
         return action.collections.reduce((acc, col) =>
             ({ ...acc, [col]: { ...state[col], stale: true } }), {})
     case 'FILL_COLLECTION':
-        return { ...state, [col]: { stale: false, docs: action.docs } }
+        return { ...state, [col]: { stale: false, docs: action.docs.reduce((acc, d) =>
+            ({ ...acc, [d._id]: d }), {}) } }
     case 'INVALIDATE_COLLECTION':
         return { ...state, [col]: { ...state[col], stale: true } }
     default:
