@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { fillCollections, fillCollection } from 'actions'
 import { connectProps } from 'components/utils'
 import { DocCollection } from 'components/document'
+import { Scrollbars } from 'react-custom-scrollbars'
 
 
 let StoreState = connect(store => ({store}))(props =>
@@ -55,6 +56,7 @@ let Collection = connectProps(({ collections }, { params: { collection } }) =>
     },
     render: function(){
         return <div className="collection">
+            <Scrollbars universal style={{ width: '100%', height: '100%' }} autoHide={true}>
             {Object.values(this.props.collection.docs || {}).map(d =>
                 <Link
                     activeClassName="active"
@@ -63,6 +65,7 @@ let Collection = connectProps(({ collections }, { params: { collection } }) =>
                     <ShrinkingSpan text={d.Name || d.name || d.Title || d.title || `<${d._id}>`} />
                 </Link>
             )}
+            </Scrollbars>
             {this.props.children}
         </div>
     }

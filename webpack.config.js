@@ -8,7 +8,7 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /\.(js|jsx)$/, exclude: '/node_modules/', loader: 'babel' },
+            { test: /\.(js|jsx)$/, exclude: /node_modules/, loader: 'babel' },
             { test: /\.(png|jpg|gif|svg)$/, loader: 'url?limit=10000&name=[path][name].[ext]' },
             { test: /\.(html|wav|ogg|webm)$/, loader: 'file?name=[path][name].[ext]' },
             { test: /\.sass$/, loader: ExtractPlugin.extract('css!sass?indentedSyntax') },
