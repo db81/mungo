@@ -3,6 +3,7 @@ import { findDOMNode } from 'react-dom'
 import GrowingTextarea from 'react-autosize-textarea'
 import { connectProps } from 'components/utils'
 import { addDocument, updateDocument } from 'actions'
+import { Scrollbars } from 'react-custom-scrollbars'
 
 let Doc = React.createClass({
     getFieldValue: function(field){
@@ -72,6 +73,7 @@ export let DocCollection = connectProps(({ collections }, { params: { collection
         // We set the key for the doc so that when we change docs it gets re-rendered
         // with new defaultValues for inputs. Otherwise the inputs will become stale.
         return <div className="docPane">
+            <Scrollbars universal autoHide={true}>
             <button onClick={this.handleClone}>Clone schema</button>
             <Doc
                 ref="doc"
@@ -79,6 +81,7 @@ export let DocCollection = connectProps(({ collections }, { params: { collection
                 doc={this.props.doc}
                 onChange={this.handleUpdateDoc}
             />
+            </Scrollbars>
             {this.state.updateTimeout && <div className="saving">saving...</div>}
         </div>
     }
