@@ -21,6 +21,8 @@ function collections(state = {}, action) {
         return { ...state, [col]: { ...state[col], stale: true } }
     case 'UPDATE_DOCUMENT':
         return { ...state, [col]: { ...state[col], docs: { ...state[col].docs, [doc._id]: doc } } }
+    case 'ADD_DOCUMENT': // this is a hack to get correct doc order for added docs
+        return { ...state, [col]: { ...state[col], docs: { [doc._id]: doc, ...state[col].docs } } }
     default:
         return state
     }

@@ -2,7 +2,7 @@ import React from 'react'
 import { findDOMNode } from 'react-dom'
 import GrowingTextarea from 'react-autosize-textarea'
 import { connectProps } from 'components/utils'
-import { updateDocument } from 'actions'
+import { addDocument, updateDocument } from 'actions'
 
 let Doc = React.createClass({
     getFieldValue: function(field){
@@ -20,13 +20,16 @@ let Doc = React.createClass({
     render: function(){
         return <dl className="document">
             {Object.keys(this.props.doc).filter(k => k[0] !== '_').map(k => [
-                <dt key={'t'+k}>{k}</dt>,
+                <dt key={'t'+k}>
+                    <input type="text" defaultValue={k} placeholder="<key>" />
+                </dt>,
                 <dd key={'d'+k}>
                     <GrowingTextarea
                         ref={k}
                         style={{ resize: 'none' }}
                         defaultValue={this.props.doc[k]}
-                        onChange={evt => this.props.onChange(k, evt)}
+                        onChange={this.props.onChange}
+                        placeholder="<value>"
                     />
                 </dd>
             ])}
@@ -47,7 +50,7 @@ export let DocCollection = connectProps(({ collections }, { params: { collection
                 this.persistDocument()
         }
     },
-    handleUpdateDoc: function(field, evt) {
+    handleUpdateDoc: function() {
         this.persistDocument()
     },
     persistDocument: function() {
@@ -60,10 +63,16 @@ export let DocCollection = connectProps(({ collections }, { params: { collection
                 this.setState({ updateTimeout: null }))
         }, 1000) })
     },
+    handleClone: function() {
+        this.props.dispatch(addDocument(this.props.collection,
+            Object.keys(this.props.doc).reduce((acc, k) =>
+            ({ ...acc, [k]: '' }), {})))
+    },
     render: function(){
         // We set the key for the doc so that when we change docs it gets re-rendered
         // with new defaultValues for inputs. Otherwise the inputs will become stale.
         return <div className="docPane">
+            <button onClick={this.handleClone}>Clone schema</button>
             <Doc
                 ref="doc"
                 key={this.props.doc._id}

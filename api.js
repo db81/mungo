@@ -33,27 +33,37 @@ router.param('collection', (req, res, next, colname) => {
 })
 
 router.param('id', (req, res, next, id) => {
-    req.objId = ObjectID(id)
+    req.id = ObjectID(id)
     next()
 })
 
 router.use('/collections', BodyParser.json())
+
 router.route('/collections/:collection/:id').
 
-    get((req, res) => req.collection.find({ _id: req.objId }).next().
+    get((req, res) => req.collection.find({ _id: req.id }).next().
         then(result => result && res.json(result) || res.status(404).send('Document not found.')).
         catch(err => res.status(500).send(err.message))).
 
-    post((req, res) => req.collection.findOneAndReplace({ _id: req.objId }, req.body).
-        then(() => req.collection.find({ _id: req.objId }).next()).
+    post((req, res) => req.collection.findOneAndReplace({ _id: req.id }, req.body).
+        then(() => req.collection.find({ _id: req.id }).next()).
         then(result => res.json(result)).
         catch(err => res.status(500).send(err.message)))
 
 
 router.route('/collections/:collection').
+
     // TODO: pagination.
     get((req, res) => req.collection.find().sort({ _id: -1 }).toArray().then(result => res.json(result)).
-        catch(err => res.status(500).send(err.message)))
+        catch(err => res.status(500).send(err.message))).
+
+    put((req, res) => {
+        let _id = new ObjectID()
+        return req.collection.insertOne({ ...req.body, _id }).then(() =>
+            req.collection.find({ _id }).next()).
+            then(result => res.json(result)).
+            catch(err => res.status(500).send(err.message))
+    })
 
 router.route('/collections').
     get((req, res) => db.collections().then(cols => res.json(cols.map(c => c.collectionName).

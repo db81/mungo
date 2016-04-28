@@ -38,6 +38,22 @@ export function invalidateCollection(collection) {
     }
 }
 
+export function addDocument(collection, doc) {
+    return (dispatch) => {
+        return fetch(`${apiPrefix}/collections/${collection}`, {
+            method: 'PUT',
+            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...doc, _id: undefined })
+        }).then(res => res.json()).then(res => {
+            dispatch({
+                type: 'ADD_DOCUMENT',
+                collection,
+                doc: res
+            })
+        })
+    }
+}
+
 export function updateDocument(collection, doc) {
     return (dispatch) => {
         return fetch(`${apiPrefix}/collections/${collection}/${doc._id}`, {

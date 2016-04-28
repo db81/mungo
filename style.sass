@@ -80,16 +80,23 @@ $collectionPaneWidth: 480px
         right: 0
         margin: 1em
         color: gray
+    button
+        border: 1px solid gray
+        background: transparent
+        color: gray
+        border-radius: 1em
+        padding: 0.5em
 
 dl.document
-    dt
+    dt input
         font-weight: bold
         font-family: sans-serif
+        font-size: 1.0em
     dd
         margin: 0.5em 1em
-        textarea
-            border: none
-            outline: none
-            background: none
-            color: black
-            width: 100%
+    textarea, input[type="text"]
+        border: none
+        outline: none
+        background: none
+        color: black
+        width: 100%
