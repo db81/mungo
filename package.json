@@ -5,8 +5,8 @@
   "private": true,
   "main": "server.js",
   "scripts": {
-    "start": "webpack --progress --color && node server.js",
-    "watch": "webpack --progress --color --watch"
+    "start": "webpack --progress --colors && node server.js",
+    "watch": "webpack --progress --colors --watch"
   },
   "babel": {
     "presets": [

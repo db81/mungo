@@ -4,7 +4,7 @@ body
 $indexPaneWidth: 250px
 $collectionPaneWidth: 480px
 
-.index, .collection
+.index, .collection, .docPane
     box-shadow: 5px 0px 5px 0px #919386
 
 .index
@@ -43,6 +43,14 @@ $collectionPaneWidth: 480px
         color: #eee
         background-color: #6383a2
 
+@mixin gradientLeftBorder($color1, $color2, $width)
+    border-width: 0
+    border-left-style: solid
+    border-left-width: $width * 1px
+    border-image-slice: 0 0 0 $width
+    border-image-width: auto
+    border-image-source: linear-gradient(to right, $color1 0%, $color2 $width * 1px)
+
 .collection
     position: absolute
     left: $indexPaneWidth
@@ -51,11 +59,21 @@ $collectionPaneWidth: 480px
     padding: 1em 0
     width: $collectionPaneWidth
     background-color: #e5e5e5
-    border-image: linear-gradient(to right, #5A5C60 0%, #BDCBD8 100%) 1 100%
-    border-left-style: solid
-    border-left-width: 5px
+    +gradientLeftBorder(#5a5c60, #bdcbd8, 5)
     > a
         padding: 0.5em 1.0em
+
+.docPane
+    position: absolute
+    top: 0
+    bottom: 0
+    left: $collectionPaneWidth
+    width: 600px
+    padding: 1em
+    background-color: #fdfdf6
+    +gradientLeftBorder(#9a9ea8, #fff, 4)
+    .document
+        font-size: 1.5em
 
 dl.document
     dt

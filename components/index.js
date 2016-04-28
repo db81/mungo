@@ -5,7 +5,7 @@ import { fillCollections, fillCollection } from 'actions'
 
 // A version of connect for picking state based on props.
 let connectProps = (f => connect(x => x, dispatch => ({ dispatch }),
-    (state, d, props) => ({ ...d, ...f(state, props) })))
+    (state, d, { children, ...props}) => ({ ...d, children, ...f(state, props) })))
 
 let StoreState = connect(store => ({store}))(props =>
     <pre className="storeState">{JSON.stringify(props.store, null, 2)}</pre>)
@@ -22,8 +22,9 @@ let DocCollection = connectProps(({ collections }, { params: { collection, id } 
     ({ collection, doc: collections[collection].docs[id] }))
 (React.createClass({
     render: function(){
-        console.log('asdf')
-        return <Doc doc={this.props.doc} />
+        return <div className="docPane">
+            <Doc doc={this.props.doc} />
+        </div>
     }
 }))
 
@@ -32,6 +33,7 @@ let Index = connect(({ collections }) => ({ collections: Object.keys(collections
     render: function(){
         return <div className="index">
             <h1>Mungo</h1>
+            <h2>Views</h2>
             <h2>Collections</h2>
             {this.props.collections.map(col =>
                 <Link
