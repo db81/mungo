@@ -5,6 +5,18 @@ import { connectProps } from 'components/utils'
 import { updateDocument } from 'actions'
 
 let Doc = React.createClass({
+    getFieldValue: function(field){
+        let val = findDOMNode(this.refs[field]).value
+        if (val === 'false' || val === 'true')
+            return val === 'true'
+        else if (parseFloat(val).toString() === val)
+            return parseFloat(val)
+        return val
+    },
+    getFieldValues: function(){
+        return Object.keys(this.refs).reduce((acc, k) =>
+            ({ ...acc, [k]: this.getFieldValue(k) }), {})
+    },
     render: function(){
         return <dl className="document">
             {Object.keys(this.props.doc).filter(k => k[0] !== '_').map(k => [
@@ -30,8 +42,8 @@ export let DocCollection = connectProps(({ collections }, { params: { collection
         if (this.props.doc !== nextProps.doc && this.props.doc._id === nextProps.doc._id) {
             // Update persisted on server. Re-persist if the doc has changed locally since then.
             // This is not strictly necessary, but is kept as a fallback.
-            let refs = this.refs.doc.refs
-            if (!Object.keys(refs).every(k => findDOMNode(refs[k]).value == nextProps.doc[k]))
+            let vals = this.refs.doc.getFieldValues()
+            if (!Object.keys(vals).every(k => vals[k] == nextProps.doc[k]))
                 this.persistDocument()
         }
     },
@@ -39,16 +51,12 @@ export let DocCollection = connectProps(({ collections }, { params: { collection
         this.persistDocument()
     },
     persistDocument: function() {
-        let refs = this.refs.doc.refs
-        let newDoc = Object.keys(refs).reduce((acc, k) =>
-            ({ ...acc, [k]: findDOMNode(refs[k]).value }), {})
-
         if (this.state.updateTimeout)
             clearTimeout(this.state.updateTimeout)
 
         this.setState({ updateTimeout: setTimeout(() => {
             this.props.dispatch(updateDocument(this.props.collection,
-                { _id: this.props.doc._id, ...newDoc })).then(() =>
+                { _id: this.props.doc._id, ...this.refs.doc.getFieldValues() })).then(() =>
                 this.setState({ updateTimeout: null }))
         }, 1000) })
     },
