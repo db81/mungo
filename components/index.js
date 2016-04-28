@@ -60,7 +60,7 @@ let Collection = connectProps(({ collections }, { params: { collection } }) =>
                     activeClassName="active"
                     key={d._id}
                     to={`/collections/${this.props.name}/${d._id}`}>
-                    <ShrinkingSpan text={d.name || d._id} />
+                    <ShrinkingSpan text={d.Name || d.name || d.Title || d.title || `<${d._id}>`} />
                 </Link>
             )}
             {this.props.children}

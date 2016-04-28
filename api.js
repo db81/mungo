@@ -52,7 +52,7 @@ router.route('/collections/:collection/:id').
 
 router.route('/collections/:collection').
     // TODO: pagination.
-    get((req, res) => req.collection.find().toArray().then(result => res.json(result)).
+    get((req, res) => req.collection.find().sort({ _id: -1 }).toArray().then(result => res.json(result)).
         catch(err => res.status(500).send(err.message)))
 
 router.route('/collections').
