@@ -9,6 +9,7 @@ function views(state = {}, action) {
 
 function collections(state = {}, action) {
     let col = action.collection
+    let doc = action.doc
     switch(action.type) {
     case 'FILL_COLLECTIONS':
         return action.collections.reduce((acc, col) =>
@@ -18,6 +19,8 @@ function collections(state = {}, action) {
             ({ ...acc, [d._id]: d }), {}) } }
     case 'INVALIDATE_COLLECTION':
         return { ...state, [col]: { ...state[col], stale: true } }
+    case 'UPDATE_DOCUMENT':
+        return { ...state, [col]: { ...state[col], docs: { ...state[col].docs, [doc._id]: doc } } }
     default:
         return state
     }

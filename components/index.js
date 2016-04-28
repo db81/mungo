@@ -2,31 +2,12 @@ import React from 'react'
 import { Router, Route, Link, browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { fillCollections, fillCollection } from 'actions'
+import { connectProps } from 'components/utils'
+import { DocCollection } from 'components/document'
 
-// A version of connect for picking state based on props.
-let connectProps = (f => connect(x => x, dispatch => ({ dispatch }),
-    (state, d, { children, ...props}) => ({ ...d, children, ...f(state, props) })))
 
 let StoreState = connect(store => ({store}))(props =>
     <pre className="storeState">{JSON.stringify(props.store, null, 2)}</pre>)
-
-let Doc = ({doc}) =>
-    <dl className="document">
-        {Object.keys(doc).filter(k => k[0] !== '_').map(k => [
-            <dt key={'t'+k}>{k}</dt>,
-            <dd key={'d'+k}>{doc[k]}</dd>
-        ])}
-    </dl>
-
-let DocCollection = connectProps(({ collections }, { params: { collection, id } }) =>
-    ({ collection, doc: collections[collection].docs[id] }))
-(React.createClass({
-    render: function(){
-        return <div className="docPane">
-            <Doc doc={this.props.doc} />
-        </div>
-    }
-}))
 
 let Index = connect(({ collections }) => ({ collections: Object.keys(collections) }))
 (React.createClass({
@@ -52,11 +33,10 @@ function View(props) {
     return <p>View {props.params.view}. <Link to="/">Back</Link>.</p>
 }
 
-// A span that decreases font size if the text is too long.
 let ShrinkingSpan = ({ text }) => {
     let size = '1.0em'
-    if (text.length > 65) size = '0.8em'
-    else if (text.length > 100) size = '0.6em'
+    if (text.length > 100) size = '0.6em'
+    else if (text.length > 65) size = '0.8em'
     return <span style={{ fontSize: size }}>
         {text}
     </span>

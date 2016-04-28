@@ -37,3 +37,19 @@ export function invalidateCollection(collection) {
         collection
     }
 }
+
+export function updateDocument(collection, doc) {
+    return (dispatch) => {
+        return fetch(`${apiPrefix}/collections/${collection}/${doc._id}`, {
+            method: 'POST',
+            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...doc, _id: undefined })
+        }).then(res => res.json()).then(res => {
+            dispatch({
+                type: 'UPDATE_DOCUMENT',
+                collection,
+                doc: res
+            })
+        })
+    }
+}
