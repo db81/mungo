@@ -1,13 +1,18 @@
-import fetch from 'isomorphic-fetch'
+import isoFetch from 'isomorphic-fetch'
 import Config from 'config'
 
-let apiPrefix = '/api'
-if (Config) // running on server
-    apiPrefix = `http://localhost:${Config.port}/api`
+let fetch
+if (Config) { // running on server
+    fetch = (path, { ...params, headers } = {}) =>
+        isoFetch(`${Config.enableHttps ? 'https' : 'http'}://localhost:${Config.port}/api/${path}`,
+        { ...params, headers: { ...headers, 'X-Local-Access-Token': global.localAccessToken } })
+} else {
+    fetch = (path, params) => isoFetch('/api/' + path, { credentials: 'same-origin', ...params })
+}
 
 export function fillCollections() {
     return (dispatch) => {
-        return fetch(apiPrefix + '/collections').then(res => res.json()).then(res => {
+        return fetch('collections').then(res => res.json()).then(res => {
             dispatch({
                 type: 'FILL_COLLECTIONS',
                 collections: res,
@@ -18,7 +23,7 @@ export function fillCollections() {
 
 export function fillCollection(collection) {
     return (dispatch) => {
-        return fetch(apiPrefix + '/collections/' + collection).then(res => res.json()).then(res => {
+        return fetch('collections/' + collection).then(res => res.json()).then(res => {
             dispatch({
                 type: 'FILL_COLLECTION',
                 collection,
@@ -40,7 +45,7 @@ export function invalidateCollection(collection) {
 
 export function addDocument(collection, doc) {
     return (dispatch) => {
-        return fetch(`${apiPrefix}/collections/${collection}`, {
+        return fetch('collections/' + collection, {
             method: 'PUT',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...doc, _id: undefined })
@@ -56,7 +61,7 @@ export function addDocument(collection, doc) {
 
 export function updateDocument(collection, doc) {
     return (dispatch) => {
-        return fetch(`${apiPrefix}/collections/${collection}/${doc._id}`, {
+        return fetch(`collections/${collection}/${doc._id}`, {
             method: 'POST',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...doc, _id: undefined })
